@@ -83,3 +83,17 @@
 
 (define (derive-n f n dx)
   ((repeated (lambda (g) (derive g dx)) n) f))
+
+
+(define my#t (lambda (x y) x))
+(define my#f (lambda (x y) y))
+(define my-if (lambda (b x y) ((b x y))))
+
+(define gamma
+  (lambda (f)
+    (lambda (n)
+      (if (= n 0) 1
+          (* n (f (- n 1)))))))
+
+(define (gamma-inf me) (lambda (n) ((gamma (me me)) n)))
+(define fact (gamma-inf gamma-inf))
