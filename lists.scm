@@ -54,6 +54,7 @@
 
 (define (reverse l)
   (foldr rcons '() l))
+;(deep-foldr '() id rcons))
 
 (define (snoc u v) (cons v u))
 
