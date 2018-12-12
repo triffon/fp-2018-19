@@ -4,7 +4,7 @@ import Prelude
   hiding (head, tail, null, length,
           enumFromTo, enumFromThenTo, (++), reverse,
           foldr, foldl, scanr, scanl, zip, zipWith, unzip,
-          takeWhile, dropWhile)
+          takeWhile, dropWhile, map, filter)
 
 x :: Int
 x = 2
@@ -46,6 +46,12 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _  nv []      = nv
 foldr op nv (x:xs)  = x `op` r
   where r = foldr op nv xs
+
+map :: (a -> b) -> [a] -> [b]
+map f = foldr (\x r -> f x : r) []
+
+filter :: (a -> Bool) -> [a] -> [a]
+filter p = foldr (\x r -> if p x then x:r else r) []
 
 -- head (scanr op nv xs) == foldr op nv xs
 -- last (scanr op nv xs) == nv
