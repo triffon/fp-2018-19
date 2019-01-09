@@ -194,8 +194,8 @@ data Bin = One | BitZero Bin | BitOne Bin
 
 -- 6₁₀ = 110₂
 -- six = BitZero $ BitOne One
-(%) = flip ($)
-six = One % BitOne % BitZero
+-- (&) = flip ($)
+six = One & BitOne & BitZero
 
 fromBin :: Bin -> Integer
 fromBin One         = 1
@@ -210,7 +210,7 @@ toBin n
   where n2 = toBin $ n `div` 2
 
 succBin :: Bin -> Bin
-succBin One         = One % BitZero
+succBin One         = One & BitZero
 succBin (BitZero b) = BitOne b
 succBin (BitOne  b) = BitZero (succBin b)
 -- ....1 + 1 = ? 
