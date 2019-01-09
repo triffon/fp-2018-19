@@ -296,3 +296,35 @@ level n (Tree _ ts) = levelTrees (n-1) ts
 levelTrees :: Integer -> TreeList a -> [a]
 levelTrees _ None           = []
 levelTrees n (SubTree t ts) = level n t ++ levelTrees n ts
+
+data SExpr = SBool Bool |
+             SInt Int  |
+             SChar Char |
+             SDouble Double |
+             SList { getList :: [SExpr] }
+             deriving (Eq, Ord, Show, Read)
+
+sexpr = SList [SInt 2, SChar 'a',
+                       SList [SBool True, SDouble 1.2, SList []]]
+sexpr2 = SList [SInt 2, SChar 'a',
+                       SList [SBool True, SDouble 1.2, SList []]]
+
+printSExpr :: SExpr -> String
+printSExpr (SBool True) = "#t"
+printSExpr (SBool False) = "#f"
+printSExpr (SChar c)     = "#\\" ++ [c]
+printSExpr (SInt i)      = show i
+printSExpr (SDouble d)   = show d
+printSExpr (SList l)     = "(" ++
+                           (concat $ map ((' ':)  . printSExpr) l)
+                                 ++ ")"
+
+countAtoms :: SExpr -> Integer
+countAtoms (SList l) = sum $ map countAtoms l
+--countAtoms (SList []) = 0
+--countAtoms (SList (se:ses)) = countAtoms se + countAtoms (SList ses)
+countAtoms _         = 1
+
+flatten :: SExpr -> SExpr
+flatten (SList l)    = SList $ concat $ map (getList . flatten) l
+flatten a            = SList [a]
